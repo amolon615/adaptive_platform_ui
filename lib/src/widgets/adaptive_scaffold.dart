@@ -455,6 +455,13 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             useNativeBottomBar &&
             tabBar != null;
 
+        // When navigationBar is null, skip CupertinoPageScaffold to avoid
+        // nesting with the tab screen's own CupertinoPageScaffold, which causes
+        // double safe-area handling and a visible clipping region at the top.
+        if (navigationBar == null) {
+          return _wrapWithDrawerIfNeeded(bodyWidget);
+        }
+
         return _wrapWithDrawerIfNeeded(
           CupertinoPageScaffold(
             resizeToAvoidBottomInset: !hasNativeTabBar,
